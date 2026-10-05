@@ -1,0 +1,17 @@
+name: Keep VM Alive
+
+on:
+  schedule:
+    # اجرا هر ۲۰ دقیقه یک‌بار
+    - cron: '*/20 * * * *'
+  workflow_dispatch: # امکان اجرای دستی
+
+jobs:
+  ping-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP Request
+        run: |
+          # آدرس وب یا IP اختصاصی سرورتان در prepare.sh را اینجا بگذارید
+          curl -s -L "https://7681-04aedc0af414.environment.sh" > /dev/null
+          echo "Ping sent successfully at $(date)"

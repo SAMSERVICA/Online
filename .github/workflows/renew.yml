@@ -1,0 +1,30 @@
+name: Auto Renew Workspace
+
+on:
+  schedule:
+    # اجرا هر ۴۵ ساعت یک‌‌بار (قبل از سررسیدن ۴۸ ساعت)
+    - cron: '0 */45 * * *'
+  workflow_dispatch:
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Run Renew Script
+        env:
+          PREPARE_EMAIL: ${{ secrets.PREPARE_EMAIL }}
+          PREPARE_PASSWORD: ${{ secrets.PREPARE_PASSWORD }}
+        run: python auto_renew.py
